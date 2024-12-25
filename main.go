@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strconv"
 
 	"example.com/event-app/db"
 	"example.com/event-app/models"
@@ -13,6 +14,7 @@ func main() {
 	server := gin.Default()
 
 	server.GET("/events", getEvents)
+	server.GET("/events/:id", getSingleEvent)
 	server.POST("/events", createEvent)
 
 	server.Run(":8080") // localhost:8080
@@ -29,6 +31,31 @@ func getEvents(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(200, events)
+}
+
+func getSingleEvent(ctx *gin.Context) {
+	eventId, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"Message": "Couldn't fetch event",
+			"error":   err,
+		})
+		return
+	}
+
+	event, err := models.GetEventByID(eventId)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"Message": "Couldn't fetch event",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, event)
+
 }
 
 func createEvent(ctx *gin.Context) {
