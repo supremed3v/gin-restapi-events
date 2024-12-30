@@ -1,10 +1,10 @@
 POST http://localhost:8080/events
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1haWwyQHRlc3QuY29tIiwiZXhwIjoxNzM1NTM1ODI3LCJ1c2VySWQiOjJ9.DzPvS8vYokH7d9TvMgzX58LZ9CcSL4cBbMrT_WuqELM
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1haWxAdGVzdC5jb20iLCJleHAiOjE3MzU1Mzc3NTAsInVzZXJJZCI6MX0.KKG6Z8zbDTWYiYyNSTe0JVISxT7N8ikID3jTQiF0DWo
 
 {
   "name": "Test Event",
   "dateTime": "2021-12-31T15:30:00.000Z",
   "location": "My House",
-  "description": "Another great event to check user authentication"
+  "description": "Another great event to check user authentication and registration for events"
 }
