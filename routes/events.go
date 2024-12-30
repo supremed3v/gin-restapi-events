@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"example.com/event-app/models"
-	"example.com/event-app/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -48,29 +47,17 @@ func getSingleEvent(ctx *gin.Context) {
 }
 
 func createEvent(ctx *gin.Context) {
-	token := ctx.Request.Header.Get("Authorization")
-
-	if token == "" {
-		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"error": "Couldn't create event, please login",
-		})
-		return
-	}
-	uID, err := utils.VerifyToken(token)
-
-	if err != nil {
-		ctx.JSON(401, err)
-		return
-	}
 
 	var event models.Event
-	err = ctx.ShouldBindJSON(&event)
+	err := ctx.ShouldBindJSON(&event)
 	if err != nil {
 		ctx.JSON(401, err)
 		return
 	}
 
-	event.UserID = uID
+	userId := ctx.GetInt64("userId")
+
+	event.UserID = userId
 
 	err = event.Save()
 	if err != nil {
