@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"example.com/event-app/models"
+	"example.com/event-app/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -55,15 +56,20 @@ func createEvent(ctx *gin.Context) {
 		})
 		return
 	}
+	err := utils.VerifyToken(token)
 
-	var event models.Event
-	err := ctx.ShouldBindJSON(&event)
 	if err != nil {
 		ctx.JSON(401, err)
 		return
 	}
 
-	event.ID = 1
+	var event models.Event
+	err = ctx.ShouldBindJSON(&event)
+	if err != nil {
+		ctx.JSON(401, err)
+		return
+	}
+
 	event.UserID = 1
 
 	err = event.Save()
