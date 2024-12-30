@@ -2,6 +2,7 @@ package routes
 
 import (
 	"example.com/event-app/models"
+	"example.com/event-app/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -41,6 +42,13 @@ func login(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(200, gin.H{"message": "login successfull"})
+	token, err := utils.GenerateToken(user.Email, user.ID)
+
+	if err != nil {
+		ctx.JSON(401, err.Error())
+		return
+	}
+
+	ctx.JSON(200, gin.H{"message": "login successfull", "token": token})
 
 }
