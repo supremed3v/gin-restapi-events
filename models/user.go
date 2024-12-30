@@ -43,7 +43,7 @@ func (u User) Save() error {
 
 }
 
-func (u User) Login() error {
+func (u *User) Login() error {
 
 	query := "SELECT id, password FROM users WHERE email = ?"
 

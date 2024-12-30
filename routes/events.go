@@ -56,7 +56,7 @@ func createEvent(ctx *gin.Context) {
 		})
 		return
 	}
-	err := utils.VerifyToken(token)
+	uID, err := utils.VerifyToken(token)
 
 	if err != nil {
 		ctx.JSON(401, err)
@@ -70,7 +70,7 @@ func createEvent(ctx *gin.Context) {
 		return
 	}
 
-	event.UserID = 1
+	event.UserID = uID
 
 	err = event.Save()
 	if err != nil {
