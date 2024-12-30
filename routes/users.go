@@ -23,3 +23,24 @@ func signup(ctx *gin.Context) {
 		"message": "User created successfully",
 	})
 }
+
+func login(ctx *gin.Context) {
+	var user models.User
+
+	err := ctx.ShouldBindJSON(&user)
+
+	if err != nil {
+		ctx.JSON(402, err)
+		return
+	}
+
+	err = user.Login()
+
+	if err != nil {
+		ctx.JSON(401, err.Error())
+		return
+	}
+
+	ctx.JSON(200, gin.H{"message": "login successfull"})
+
+}

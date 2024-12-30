@@ -1,6 +1,8 @@
 package models
 
 import (
+	"errors"
+
 	"example.com/event-app/db"
 	"example.com/event-app/utils"
 )
@@ -39,4 +41,26 @@ func (u User) Save() error {
 
 	return err
 
+}
+
+func (u User) Login() error {
+
+	query := "SELECT password FROM users WHERE email = ?"
+
+	row := db.DB.QueryRow(query, u.Email)
+
+	var retrievedPassword string
+	err := row.Scan(&retrievedPassword)
+
+	if err != nil {
+		return errors.New("error retrieving password")
+	}
+
+	passwordIsValid := utils.DecodePassword(u.Password, retrievedPassword)
+
+	if !passwordIsValid {
+		return errors.New("credentials invalid password do not match")
+	}
+
+	return nil
 }
