@@ -2,6 +2,7 @@ package models
 
 import (
 	"example.com/event-app/db"
+	"example.com/event-app/utils"
 )
 
 type User struct {
@@ -21,7 +22,12 @@ func (u User) Save() error {
 
 	defer stmt.Close()
 
-	result, err := stmt.Exec(u.Email, u.Password)
+	hashPass, err := utils.HashPassword(u.Password)
+	if err != nil {
+		return err
+	}
+
+	result, err := stmt.Exec(u.Email, hashPass)
 
 	if err != nil {
 		return err
